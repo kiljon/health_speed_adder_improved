@@ -1,0 +1,39 @@
+"Phrases"
+{
+	"KillHealth"
+	{
+		"#format"		"{1:d}"
+		"en"			"Got +{1}HP by Kill Enemy"
+	}
+
+	"HeadShotHealth"
+	{
+		"#format"		"{1:d}"
+		"en"			"Got +{1}HP by Headshot Kill"
+	}
+	"KnifeHealth"
+	{
+		"#format"		"{1:d}"
+		"en"			"Got +{1}HP by Knife Kill"
+	}
+	
+	"KillSpeed"
+	{
+		"#format"		"{1:0.2f}"
+		"en"			"Got +{1} Speed by Kill Enemy"
+	}
+	"HeadShotSpeed"
+	{
+		"#format"		"{1:0.2f}"
+		"en"			"Got +{1} Speed by HeadShot Kill"
+	}
+	"KnifeSpeed"
+	{
+		"#format"		"{1:0.2f}"
+		"en"			"Got +{1} Speed by Knife Kill"
+	}
+	"Speed"
+	{
+		"en"	"Speed"
+	}
+}

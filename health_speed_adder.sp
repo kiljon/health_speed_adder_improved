@@ -175,14 +175,12 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 			if(GetConVarInt(g_MSG) != 0 && GetConVarInt(g_SpeedHeadshot) != 0)
 			{
 				//PrintToChat(killer, "+%0.2f speed by HeadShot Kill", (speed - GetConVarInt(g_SpeedDefault))/260);
-				PrintToChat(killer, "\x01%t beepboop", "HeadShotSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
-				PrintHintText(killer, "\x01%t beepboop", "HeadShotSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
+				PrintToChat(killer, "\x01%t", "HeadShotSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
 			}
 		}
 		if (!GetEventBool(event, "headshot") && !StrEqual(sWeapon, "knife"))
 		{
-			PrintToChat(killer, "\x01%t beepboop", "KillSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
-			PrintHintText(killer, "\x01%t beepboop", "KillSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
+			PrintToChat(killer, "\x01%t", "KillSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
 		}
 		
 		if(StrEqual(sWeapon, "knife") && GetConVarInt(g_SpeedKnife) != 0)
@@ -190,8 +188,7 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 			speed = speed + GetConVarInt(g_SpeedKnife);
 			if(GetConVarInt(g_MSG) != 0 && GetConVarInt(g_SpeedKnife) != 0)
 			{
-				PrintToChat(killer, "\x01%t beepboop", "KnifeSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
-				PrintHintText(killer, "\x01%t beepboop", "KnifeSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
+				PrintToChat(killer, "\x01%t", "KnifeSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
 			}
 		}
 		SetEntPropFloat(killer, Prop_Send, "m_flMaxspeed", speed);
@@ -230,7 +227,7 @@ public Action:Timer_Think(Handle:timer)
 		{
 			speed = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
 			//ShowSpeedMeter(client, voteInProgress);
-			PrintHintText(client, "Current Speed\n%.1f %s", speed * g_fUnitMess_Calc[g_iPlugin_Unit], g_szUnitMess_Name[g_iPlugin_Unit]);
+			PrintHintText(client, "\x01\n%.1f %s", "Speed", speed * g_fUnitMess_Calc[g_iPlugin_Unit], g_szUnitMess_Name[g_iPlugin_Unit]);
 		}
 		else if (IsClientObserver(client))
 		{
