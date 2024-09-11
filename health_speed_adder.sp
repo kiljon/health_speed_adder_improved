@@ -227,7 +227,7 @@ public Action:Timer_Think(Handle:timer)
 		{
 			speed = GetEntPropFloat(client, Prop_Send, "m_flMaxspeed");
 			//ShowSpeedMeter(client, voteInProgress);
-			PrintHintText(client, "\x01\n%.1f %s", "Speed", speed * g_fUnitMess_Calc[g_iPlugin_Unit], g_szUnitMess_Name[g_iPlugin_Unit]);
+			PrintHintText(client, "%t\n%.1f %s", "Speed", speed * g_fUnitMess_Calc[g_iPlugin_Unit], g_szUnitMess_Name[g_iPlugin_Unit]);
 		}
 		else if (IsClientObserver(client))
 		{
