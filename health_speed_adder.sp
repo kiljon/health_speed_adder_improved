@@ -16,9 +16,10 @@ new Handle:g_HealthAdd;
 new Handle:g_HealthLimit;
 new Handle:g_HealthAddEnable;
 new Handle:g_SpeedDefault;
-new Handle:g_SpeedMax;
+new Handle:g_SpeedLimit;
 new Handle:g_SpeedEnable;
 new Handle:g_SpeedMulti;
+new Handle:g_SpeedHintEnable;
 new Handle:g_MSG;
 new Handle:g_HeadShotAdd;
 new Handle:g_KnifeAdd;
@@ -62,7 +63,8 @@ public OnPluginStart()
 	g_HealthLimit = CreateConVar("health_limit", "0", "Max health added by kill, 0 to disable", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	g_SpeedEnable = CreateConVar("speed_add_enable", "1", "Active speed bonus when kill", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	g_SpeedMulti = CreateConVar("speed_add", "100", "Amount of speed added by kill", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
-	g_SpeedMax = CreateConVar("speed_maximum", "800", "Maximum amount of speed after killing", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
+	g_SpeedLimit = CreateConVar("speed_limit", "800", "Max amount of speed after killing", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
+	g_SpeedHintEnable = CreateConVar("speed_hint_enable", "1", "Show a hint with the speed", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	g_SpeedDefault = CreateConVar("speed_default", "260", "Default speed of a player default value is 260", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	g_SpeedHeadshot = CreateConVar("speed_headshot_add", "50", "Default speed of a player default value is 260", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
 	g_SpeedKnife = CreateConVar("speed_knife_add", "100", "Default speed of a player default value is 260", FCVAR_SPONLY | FCVAR_REPLICATED | FCVAR_NOTIFY);
@@ -165,13 +167,17 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 	if(GetConVarInt(g_SpeedEnable) != 0)
 	{
 		new Float:speed = GetEntPropFloat(killer, Prop_Send, "m_flMaxspeed")+GetConVarInt(g_SpeedMulti);
-		if (speed > GetConVarFloat(g_SpeedMax))
+		if (speed > GetConVarFloat(g_SpeedLimit))
 		{
-			speed = GetConVarFloat(g_SpeedMax);
+			speed = GetConVarFloat(g_SpeedLimit);
 		}
 		if (GetEventBool(event, "headshot"))
 		{
 			speed = speed + GetConVarInt(g_SpeedHeadshot);
+			if (speed > GetConVarFloat(g_SpeedLimit))
+			{
+				speed = GetConVarFloat(g_SpeedLimit);
+			}
 			if(GetConVarInt(g_MSG) != 0 && GetConVarInt(g_SpeedHeadshot) != 0)
 			{
 				//PrintToChat(killer, "+%0.2f speed by HeadShot Kill", (speed - GetConVarInt(g_SpeedDefault))/260);
@@ -186,6 +192,10 @@ public Action:PlayerDeath(Handle:event, const String:name[], bool:dontBroadcast)
 		if(StrEqual(sWeapon, "knife") && GetConVarInt(g_SpeedKnife) != 0)
 		{
 			speed = speed + GetConVarInt(g_SpeedKnife);
+			if (speed > GetConVarFloat(g_SpeedLimit))
+			{
+				speed = GetConVarFloat(g_SpeedLimit);
+			}
 			if(GetConVarInt(g_MSG) != 0 && GetConVarInt(g_SpeedKnife) != 0)
 			{
 				PrintToChat(killer, "\x01%t", "KnifeSpeed", (speed - GetConVarInt(g_SpeedDefault))/260);
@@ -246,7 +256,7 @@ public OnConfigsExecuted()
 {
 	
 	// Verify that the timer for the plugin is invalid
-	if (g_hTimer_Think == INVALID_HANDLE)
+	if (g_hTimer_Think == INVALID_HANDLE && GetConVarInt(g_SpeedHintEnable) != 0)
 	{
 		// Start timer for the plugin
 		g_hTimer_Think = CreateTimer(g_fPlugin_DisplayTick, Timer_Think, INVALID_HANDLE, TIMER_REPEAT);
